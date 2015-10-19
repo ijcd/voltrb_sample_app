@@ -1,0 +1,48 @@
+<:Title>
+  Todos
+
+<:Body>
+  <div class="row">
+    <div class="col-md-4">
+
+      <h1>{{ _todos.size }} Todo List</h1>
+
+      <button e-click="check_all">Check All ({{ incomplete }})</button>
+
+      <div class="progress">
+        <div class="progress-bar-success" role="progressbar" style="width: {{ percent_complete }}%;" >
+          {{ percent_complete }}%
+        </div>
+      </div>      
+
+      <table class="todo-table">
+        {{_todos.each_with_index do |todo, index| }}
+        <!-- Use params to store the current index -->
+        <tr
+          e-click="params._index = index"
+          class="{{ if (params._index || 0).to_i == index }}selected{{ end }}"
+          >
+          <td><input type="checkbox" checked="{{ todo._completed }}" /></td>
+          <td class="{{ if todo._completed }}complete{{ end }}">{{ todo._name }}</td>
+          <td><button e-click="todo.destroy">X</button></td>
+        </tr>
+        {{ end }}
+      </table>
+
+      <form e-submit="add_todo" role="form">
+        <div class="form-group">
+          <label>Todo</label>
+          <input class="form-control" type="text" value="{{ page._new_todo }}" />
+        </div>
+      </form>
+    </div>
+
+    <!-- Display extra info -->
+    <div class="col-md-8">
+      {{ if current_todo }}
+      <h2>{{ current_todo._name }}</h2>
+
+      <textarea>{{ current_todo._description }}</textarea>
+      {{ end }}
+    </div>
+  </div>
